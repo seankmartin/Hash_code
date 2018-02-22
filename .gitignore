@@ -1,0 +1,9 @@
+#Ignore pdfs
+*.pdf
+#Ignore out and in
+*.in
+*.out
+
+#ignore others
+*.exe
+*.ipynb
