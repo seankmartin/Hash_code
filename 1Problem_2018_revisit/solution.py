@@ -2,12 +2,13 @@
 
 import numpy as np
 import os
+from datetime import datetime
 from time import time
 
 from utils import line_to_data, zip_dir
 # import your solution here
-from matheus import matheus_solution
-from ham import ham_solution
+# from matheus import matheus_solution
+# from ham import ham_solution
 from sean import sean_solution
 
 
@@ -22,8 +23,8 @@ def read_file(input_location):
     N - number of rides
     B - per ride bonus for starting on time
     T - number of steps in the simulation
-    M - matrix consisting of N rows and 7 columns. 
-        Each column describes a ride, and is structured as 
+    M - matrix consisting of N rows and 7 columns.
+        Each column describes a ride, and is structured as
         (numbers indicate indices):
         ride 6: from [0, 1] to [2, 3], earliest start 4, latest finish 5
     """
@@ -51,30 +52,58 @@ def write_file(output_location, solution):
 def print_solution(solution):
     """TODO this should be updated with things relevant to the solution."""
     # If there is nothing useful, just return
-    return
     print("\tSolution is: {}".format(solution))
 
 
-def run(input_location, method, **kwargs):
+def run(input_location, output_location, method, **kwargs):
     """Read the file, calculate solution, and write the results."""
     start_time = time()
     info = read_file(input_location)
     solution = method(info, **kwargs)
-    write_file(input_location[:-3] + ".out", solution)
-    print("\tCompleted in {} seconds".format(time() - start_time))
-    print_solution(solution)
+    solution, score = solution
+    write_file(output_location, solution)
+    print("\tCompleted in {:.2f} seconds".format(time() - start_time))
+    print_solution(score)
+    return score
 
 
 def main(method, filenames, parameter_list, do, seed=1):
     """Parse the input information and run the main loop."""
-    in_dir = "input_files"
     np.random.seed(seed)  # to reproduce results
-    locations = [os.path.join(in_dir, filename) for filename in filenames]
-    for i, (location, parameters) in enumerate(zip(locations, parameter_list)):
-        if do[i]:
-            print("Working on {} with parameters {} using {}:".format(
-                os.path.basename(location), parameters, method.__name__))
-            run(location, method, **parameters)
+
+    here = os.path.dirname(os.path.realpath(__file__))
+
+    # Create a new directory for a run to compare to old solutions
+    now = datetime.now()
+    current_time = now.strftime("%H-%M-%S")
+    out_dir = current_time
+    out_dir = os.path.join(here, "outputs", out_dir)
+    os.makedirs(out_dir, exist_ok=True)
+
+    # Zip up the directory
+    zip_loc = os.path.join(out_dir, "_Source.zip")
+    zip_dir(here, zip_loc, ".py")
+
+    in_dir = "input_files"
+    locations = [os.path.join(here, in_dir, filename)
+                 for filename in filenames]
+    scores = np.zeros(len(locations))
+    with open(os.path.join(out_dir, "Result.txt"), "w") as f:
+        for i, (location, parameters) in enumerate(zip(locations, parameter_list)):
+            if do[i]:
+                print("Working on {} with parameters {} using {}:".format(
+                    os.path.basename(location), parameters, method.__name__))
+                output_location = os.path.join(
+                    out_dir,
+                    os.path.basename(location[:-3]) + ".out")
+                score = run(location, output_location, method, **parameters)
+                scores[i] = score
+
+                f.write("{} {}\n".format(
+                    os.path.basename(location)[:-3], score))
+        last_str = "Total score: {}".format(np.sum(np.array(scores)))
+        f.write(last_str)
+        print(last_str)
 
 
 if __name__ == "__main__":
@@ -89,18 +118,13 @@ if __name__ == "__main__":
 
     # # TODO change this to specific paramters for each file
     parameter_list = [
-        {"name": "val"},
-        {"name": "val"},
-        {"name": "val"},
-        {"name": "val"},
-        {"name": "val"}
+        {},
+        {},
+        {},
+        {},
+        {}
     ]
 
     do = [True, True, True, True, True]
     seed = 1
     main(method, filenames, parameter_list, do, seed)
-
-    # zip up the source code
-    here = os.path.dirname(os.path.realpath(__file__))
-    zip_loc = os.path.join(here, "_Source.zip")
-    zip_dir(here, zip_loc, ".py")

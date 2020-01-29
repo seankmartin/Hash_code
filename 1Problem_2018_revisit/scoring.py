@@ -148,13 +148,21 @@ class JudgeSystem(object):
 
 
 import os
-filenames = ["a_example.out", "b_should_be_easy.out",
-             "c_no_hurry.out", "d_metropolis.out", "e_high_bonus.out"]
-filenames = [os.path.join("input_files", filename) for filename in filenames]
-total = 0
-for filename in filenames:
-    if os.path.isfile(filename):
-        j = JudgeSystem(filename[:-3] + "in", filename)
-        print("{} Score: {}".format(filename[:-4], j.score))
-        total += j.score
-print("Total:", total)
+
+
+def main(dirname):
+    filenames = ["a_example.out", "b_should_be_easy.out",
+                 "c_no_hurry.out", "d_metropolis.out", "e_high_bonus.out"]
+    filenames = [os.path.join("input_files", filename)
+                 for filename in filenames]
+    total = 0
+    for filename in filenames:
+        if os.path.isfile(filename):
+            j = JudgeSystem(filename[:-3] + "in", filename)
+            print("{} Score: {}".format(filename[:-4], j.score))
+            total += j.score
+    print("Total:", total)
+
+
+if __name__ == "__main__":
+    main(os.path.join("outputs", "21-08-14"))
