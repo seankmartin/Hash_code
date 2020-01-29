@@ -7,3 +7,6 @@
 #ignore others
 *.exe
 *.ipynb
+*.zip
+*.pyc
+.vscode/

@@ -22,7 +22,8 @@ def read_file(filename):
     with open(filename, 'r') as f:
         line = f.readline()
         # Read the first line
-        rows, columns, num_vehicles, num_rides, bonus, total_time = [int(n) for n in line.split()]
+        rows, columns, num_vehicles, num_rides, bonus, total_time = [
+            int(n) for n in line.split()]
 
         # Need to change
         # Read num_rides lines and store in a num_rides * 6 array
@@ -57,18 +58,21 @@ def add_ride(index, ride, cars, car_rides):
     car_rides[index].append(ride[6])
     cars[index][0] = ride[2]
     cars[index][1] = ride[3]
-    distance_from_start = distance(cars[index][0], cars[index][1], ride[0], ride[1])
+    distance_from_start = distance(
+        cars[index][0], cars[index][1], ride[0], ride[1])
     cars[index][2] += distance_from_start
     if(cars[index][2] < ride[4]):
-       cars[index][2] = ride[4]
+        cars[index][2] = ride[4]
     cars[index][2] += distance(ride[0], ride[1], ride[2], ride[3])
 
 
 def main():
     # change the filename here
-    filenames = ["a_example.in", "b_should_be_easy.in", "c_no_hurry.in", "d_metropolis.in", "e_high_bonus.in"]
+    filenames = ["a_example.in", "b_should_be_easy.in",
+                 "c_no_hurry.in", "d_metropolis.in", "e_high_bonus.in"]
     for filename in filenames:
-        rows, columns, num_vehicles, num_rides, bonus, total_time, rides = read_file(filename)
+        rows, columns, num_vehicles, num_rides, bonus, total_time, rides = read_file(
+            filename)
         cars = np.zeros((num_vehicles, 4))
         # x, y, timestep, ride-flag
         # List of empty lists
@@ -93,8 +97,10 @@ def main():
 
             for i in range(num_vehicles):
                 car = cars[i]
-                distance_from_start = distance(car[0], car[1], ride[0], ride[1])
-                start_end_distance = distance(ride[0], ride[1], ride[2], ride[3])
+                distance_from_start = distance(
+                    car[0], car[1], ride[0], ride[1])
+                start_end_distance = distance(
+                    ride[0], ride[1], ride[2], ride[3])
                 starts_in_time = False
                 arrives_in_time = False
                 if distance_from_start + car[2] <= ride[4]:
@@ -107,8 +113,7 @@ def main():
                     best_index = i
             add_ride(best_index, ride, cars, result)
 
-
-        outfile = filename + "out"
+        outfile = filename[:-2] + "out"
         write_file(outfile, result)
 
 
