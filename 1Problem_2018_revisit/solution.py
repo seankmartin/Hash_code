@@ -4,12 +4,14 @@ import numpy as np
 import os
 from datetime import datetime
 from time import time
+from copy import copy
 
-from utils import line_to_data, zip_dir
+from utils import line_to_data, zip_dir, add_params
 # import your solution here
 # from matheus import matheus_solution
 # from ham import ham_solution
 from sean import sean_solution
+from hyper_params import return_hyperparam_list
 
 
 def read_file(input_location):
@@ -50,8 +52,6 @@ def write_file(output_location, solution):
 
 
 def print_solution(solution):
-    """TODO this should be updated with things relevant to the solution."""
-    # If there is nothing useful, just return
     print("\tSolution is: {}".format(solution))
 
 
@@ -96,7 +96,10 @@ def main(method, filenames, parameter_list, do, seed=1):
                 output_location = os.path.join(
                     out_dir,
                     os.path.basename(location[:-3]) + ".out")
-                score = run(location, output_location, method, **parameters)
+                params_copy = copy(parameters)
+                params_copy["output_dir"] = out_dir
+                params_copy["input_name"] = os.path.basename(location)
+                score = run(location, output_location, method, **params_copy)
                 scores[i] = score
 
                 f.write("{} {}\n".format(
@@ -110,20 +113,21 @@ if __name__ == "__main__":
     """This is where things you should change are."""
     # Change the method here to the desired one
     method = sean_solution
+    use_hyper_params = False
 
-    # # TODO change this to be the actual filenames
     filenames = [
         "a_example.in", "b_should_be_easy.in",
         "c_no_hurry.in", "d_metropolis.in", "e_high_bonus.in"]
 
-    # # TODO change this to specific paramters for each file
-    parameter_list = [
-        {},
-        {},
-        {},
-        {},
-        {}
-    ]
+    hyper_params = return_hyperparam_list()
+    parameter_list = [{}, {}, {}, {}, {}]
+    parameter_list = add_params(
+        parameter_list, "num_evals", [5, 40, 20, 10, 2])
+    parameter_list = add_params(
+        parameter_list, "search", not use_hyper_params)
+    if use_hyper_params:
+        parameter_list = add_params(
+            parameter_list, "objective_args", hyper_params)
 
     do = [True, True, True, True, True]
     seed = 1

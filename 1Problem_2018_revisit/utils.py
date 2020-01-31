@@ -31,3 +31,19 @@ def zip_dir(in_dir, out_loc, ext=None):
                     os.path.join(root, f), os.path.join(out_loc, '..')))
     zipf.close()
     print("Wrote zip file with source code to {}".format(out_loc))
+
+
+def add_params(l, name, values):
+    """
+    Add values to l with key=name.
+    If values is one value, add the same value each time.
+    """
+    if type(values) != list:
+        values = [values] * len(l)
+    if len(l) != len(values):
+        raise ValueError(
+            "Enequal length lists in add_params {} {}".format(
+                len(l), len(values)))
+    for i, val in enumerate(values):
+        l[i][name] = val
+    return l
