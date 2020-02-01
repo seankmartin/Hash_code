@@ -1,0 +1,6 @@
+*.pyc
+.vscode/
+*.in
+*.out
+*.pdf
+*.zip
