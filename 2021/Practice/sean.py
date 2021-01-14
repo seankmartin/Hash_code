@@ -25,8 +25,7 @@ class General:
         self.idx = idx
 
     def __repr__(self):
-        return ("Thing {} with properties".format(
-            self.idx))
+        return "Thing {} with properties".format(self.idx)
 
 
 def sean_solution(info, **kwargs):
@@ -58,11 +57,11 @@ def sean_solution(info, **kwargs):
         # Return something flexible that can be used with hyperopt
         # Main point is that it has score and solution.
         return {
-            'loss': -score,
-            'score': score,
-            'solution': solution,
-            'eval_time': time.time(),
-            'status': STATUS_OK,
+            "loss": -score,
+            "score": score,
+            "solution": solution,
+            "eval_time": time.time(),
+            "status": STATUS_OK,
         }
 
     # Ignore this bit if not searching hyper_parameters!
@@ -71,13 +70,9 @@ def sean_solution(info, **kwargs):
 
         # TODO Setup what values the args searching over can have
         space = hp.choice(
-            'args',
-            [
-                {
-                    "arg1": hp.lognormal("arg1", 1, 0.5),
-                    "arg2": hp.uniform("arg2", 1, 10)
-                }
-            ])
+            "args",
+            [{"arg1": hp.lognormal("arg1", 1, 0.5), "arg2": hp.uniform("arg2", 1, 10)}],
+        )
 
         # TODO If you know the best you do, pass loss_threshold=-best
         # Do hyper-param searching - possible pass per filename num_evals
@@ -86,7 +81,8 @@ def sean_solution(info, **kwargs):
             space=space,
             algo=tpe.suggest,
             max_evals=kwargs.get("num_evals", 10),
-            trials=trials)
+            trials=trials,
+        )
 
         # Get the best hyper-params from fmin
         print("Best hyper-parameters found were:", best)
@@ -95,7 +91,8 @@ def sean_solution(info, **kwargs):
         # Save the trials to disk
         # These trials can be printed using print_trial_info in utils
         out_name = os.path.join(
-            kwargs["output_dir"], "_" + kwargs["input_name"][:-2] + "pkl")
+            kwargs["output_dir"], "_" + kwargs["input_name"][:-2] + "pkl"
+        )
         save_object(trials, out_name)
 
     else:

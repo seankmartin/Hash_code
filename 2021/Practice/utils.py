@@ -36,11 +36,17 @@ def zip_dir(in_dir, out_loc, ext=None):
         for f in files:
             if ext is not None:
                 if os.path.splitext(f)[-1] == ext:
-                    zipf.write(os.path.join(root, f), os.path.relpath(
-                        os.path.join(root, f), os.path.join(out_loc, '..')))
+                    zipf.write(
+                        os.path.join(root, f),
+                        os.path.relpath(
+                            os.path.join(root, f), os.path.join(out_loc, "..")
+                        ),
+                    )
             else:
-                zipf.write(os.path.join(root, f), os.path.relpath(
-                    os.path.join(root, f), os.path.join(out_loc, '..')))
+                zipf.write(
+                    os.path.join(root, f),
+                    os.path.relpath(os.path.join(root, f), os.path.join(out_loc, "..")),
+                )
     zipf.close()
     print("Wrote zip file with source code to {}".format(out_loc))
 
@@ -71,8 +77,8 @@ def add_params(l, name, values):
         values = [values] * len(l)
     if len(l) != len(values):
         raise ValueError(
-            "Enequal length lists in add_params {} {}".format(
-                len(l), len(values)))
+            "Enequal length lists in add_params {} {}".format(len(l), len(values))
+        )
     for i, val in enumerate(values):
         l[i][name] = val
     return l
