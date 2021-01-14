@@ -52,7 +52,7 @@ def read_file(input_location):
     None
 
     """
-    with open(input_location, 'r') as f:
+    with open(input_location, "r") as f:
         # TODO these should read the correct stuff
         A, B = line_to_data(f.readline(), np_array=False, dtype=int)
         C = line_to_data(f.readline(), dtype=float)
@@ -76,7 +76,7 @@ def write_file(output_location, solution):
     None
 
     """
-    with open(output_location, 'w') as f:
+    with open(output_location, "w") as f:
         # TODO update with writing the correct stuff
         f.write("{}\n".format(len(solution)))
         for val in solution:
@@ -162,19 +162,19 @@ def main(method, filenames, parameter_list, skip, seed):
 
     """
     # Initial checking to see if the length of the params is correct
-    individual_list_size = (
-        (len(filenames) + len(parameter_list) + len(skip)) / 3)
-    if (individual_list_size != len(filenames)):
+    individual_list_size = (len(filenames) + len(parameter_list) + len(skip)) / 3
+    if individual_list_size != len(filenames):
         raise ValueError(
             "Pass equal len filenames {} parameters {} and skips {}".format(
-                len(filenames), len(parameter_list), len(skip)))
+                len(filenames), len(parameter_list), len(skip)
+            )
+        )
 
     # Do setup of arrays etc.
     here = os.path.dirname(os.path.realpath(__file__))
     np.random.seed(seed)  # to reproduce results
     in_dir = "input_files"
-    locations = [os.path.join(here, in_dir, filename)
-                 for filename in filenames]
+    locations = [os.path.join(here, in_dir, filename) for filename in filenames]
     scores = np.zeros(len(locations))
 
     # Create a new directory at this time to compare to old solutions
@@ -190,8 +190,7 @@ def main(method, filenames, parameter_list, skip, seed):
 
     # Start the execution loop
     with open(os.path.join(out_dir, "Result.txt"), "w") as f:
-        for i, (input_location, params) in enumerate(
-                zip(locations, parameter_list)):
+        for i, (input_location, params) in enumerate(zip(locations, parameter_list)):
 
             # Ignore some files optionally
             if skip[i]:
@@ -199,11 +198,14 @@ def main(method, filenames, parameter_list, skip, seed):
                 continue
 
             # Setup and print what is happening
-            print("Working on {} with parameters {} using {}:".format(
-                os.path.basename(input_location), params, method.__name__))
+            print(
+                "Working on {} with parameters {} using {}:".format(
+                    os.path.basename(input_location), params, method.__name__
+                )
+            )
             output_location = os.path.join(
-                out_dir,
-                os.path.basename(input_location[:-3]) + ".out")
+                out_dir, os.path.basename(input_location[:-3]) + ".out"
+            )
 
             # TODO Put anything which may be useful to all solutions here
             params_copy = copy(params)
@@ -215,8 +217,7 @@ def main(method, filenames, parameter_list, skip, seed):
 
             # Write the achieved score to disk
             scores[i] = score
-            f.write("{} {}\n".format(
-                os.path.basename(input_location)[:-3], score))
+            f.write("{} {}\n".format(os.path.basename(input_location)[:-3], score))
 
         # Prints the final score
         last_str = "Total score: {}".format(np.sum(scores))
@@ -240,8 +241,9 @@ def setup_params():
 
     # This holds which iteration of the main loop you are on
     # Can be useful to know in some circumstances.
-    param_list = add_params(param_list, "iter", [
-                            str(i + 1) for i in range(len(filenames))])
+    param_list = add_params(
+        param_list, "iter", [str(i + 1) for i in range(len(filenames))]
+    )
 
     # TODO decide here if you are doing any searching
     # Leave this as True if you are not doing hyper-param searching
