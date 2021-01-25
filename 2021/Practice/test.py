@@ -6,8 +6,9 @@ And also how to do a hyper-parameter optimisation in a very simple case.
 
 from time import time
 
-from solution import print_solution
+from solution import print_solution, write_file, read_file
 from sean import sean_solution
+from common import scorer
 
 
 def test_method(method, info, **kwargs):
@@ -48,4 +49,22 @@ def test_opt():
 if __name__ == "__main__":
     # info = []
     # test_method(sean_solution, info)
-    test_opt()
+    # test_opt()
+
+    # Test file writing
+    solved_values = [
+        [2, 1, 4],
+        [3, 0, 2, 3]
+    ]
+    write_file("test.txt", solved_values)
+
+
+    # Test file reading
+    import os
+    here = os.path.dirname(os.path.realpath(__file__))
+    file_loc = os.path.join(here, "input_files", "a_example.in")
+    inp = read_file(file_loc)
+    from pprint import pprint
+    pprint(inp)
+
+    print("Score is {}".format(scorer(solved_values, inp)))

@@ -53,16 +53,23 @@ def read_file(input_location):
 
     """
     with open(input_location, "r") as f:
-        # TODO these should read the correct stuff
         M, T2, T3, T4 = line_to_data(f.readline(), np_array=True, dtype=int)
 
-        ingredients = []
+        pizzas = []
         for i in range(M):
             vals = line_to_data(f.readline(), np_array=False, dtype=str)
             vals[0] = int(vals[0])
-            ingredients.append(vals)
+            pizzas.append(vals[1:])
 
-        info = M, T2, T3, T4, ingredients
+        # M number of pizza
+        # T2 number of 2 person teams
+        # T3 number of 3 person teams
+        # T4 number of 4 person teams
+
+        # Ingredients is a list of size M with each item being
+        # an integer I - the number of ingredients, 
+        # followed by the ingredients as strings
+        info = M, T2, T3, T4, pizzas
 
     return info
 
@@ -84,10 +91,20 @@ def write_file(output_location, solution):
 
     """
     with open(output_location, "w") as f:
-        # TODO update with writing the correct stuff
+        # Each entry solution has 
+        # L (number of people) P1 P2 ... PL (the list of pizzas they get)
+
+        # First line contains a number D - number of pizza deliveries
         f.write("{}\n".format(len(solution)))
+
+        # Next D lines contain descriptions of each deliver
+        # L (number of people) P1 P2 ... PL (the list of pizzas they get)
         for val in solution:
-            f.write("{} ".format(int(val)))
+            L, pizzas = val[0], val[1:]
+            f.write("{} ".format(int(L)))
+            for p in pizzas:
+                f.write("{} ".format(int(p)))
+            f.write("\n")
 
 
 def print_solution(solution):
@@ -98,7 +115,8 @@ def print_solution(solution):
     Or the max number of rides assigned to a taxi.
     """
     # TODO print actually useful things, like summary information.
-    print("\tSolution is: {}".format(solution))
+    # print("\tSolution is: {}".format(solution))
+    pass
 
 
 def run(input_location, output_location, method, **kwargs):
@@ -267,7 +285,7 @@ def setup_params():
 if __name__ == "__main__":
     """This is where most things you should change are."""
     # TODO Change the method here to the desired one
-    method = sean_solution
+    method = matheus_solution
 
     # TODO change this to be the actual filenames
     filenames = [
