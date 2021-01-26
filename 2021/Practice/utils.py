@@ -38,14 +38,12 @@ def zip_dir(in_dir, out_loc, ext=None):
                 if os.path.splitext(f)[-1] == ext:
                     zipf.write(
                         os.path.join(root, f),
-                        os.path.relpath(
-                            os.path.join(root, f), os.path.join(out_loc, "..")
-                        ),
+                        os.path.relpath(os.path.join(root, f), in_dir),
                     )
             else:
                 zipf.write(
                     os.path.join(root, f),
-                    os.path.relpath(os.path.join(root, f), os.path.join(out_loc, "..")),
+                    os.path.relpath(os.path.join(root, f), in_dir),
                 )
     zipf.close()
     print("Wrote zip file with source code to {}".format(out_loc))
