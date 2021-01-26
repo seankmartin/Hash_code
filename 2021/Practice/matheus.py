@@ -4,7 +4,6 @@ import operator
 from common import scorer
 from tqdm import tqdm
 
-
 def count_ingredients(pizzas):
     count_ingred = {}
     for pizza in pizzas:
@@ -15,27 +14,10 @@ def count_ingredients(pizzas):
                 count_ingred[ig] = count_ingred[ig] + 1
     return count_ingred
 
-
 class Pizza():
     def __init__(self, pizza, idx, count_ingred):
-        # self.pizzas = pizzas
-        # self.count_ing = count_ingred
-        self.score = sum([1 / count_ingred[key] for key in set(pizza)])
+        self.score = sum([1/count_ingred[key] for key in set(pizza)])
         self.idx = idx
-
-    def __repr__(cls):
-        return 'pizza'
-
-    # def count_ingredients(self, pizzas):
-    #     self.count_ingred = {}
-    #     for pizza in self.pizzas:
-    #         for ig in pizza:
-    #             if ig not in self.count_ingred.keys():
-    #                 self.count_ingred[ig] = 1
-    #             elif ig in self.count_ingred.keys():
-    #                 self.count_ingred[ig] = self.count_ingred[ig] + 1
-    #     return self.count_ingred
-    
 
 def matheus_solution(info, **kwargs):
     # TODO write your solution here!
@@ -61,6 +43,8 @@ def matheus_solution(info, **kwargs):
         draw_arr.append(3)
     for i in range(T2):
         draw_arr.append(2)
+
+
         
     solution = []
 
