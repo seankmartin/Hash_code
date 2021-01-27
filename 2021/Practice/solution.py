@@ -146,7 +146,7 @@ def run(input_location, output_location, method, **kwargs):
     write_file(output_location, solution)
     print("\tCompleted in {:.2f} seconds".format(time() - start_time))
     print_solution(solution)
-    print("Scored:", score)
+    print("\tScored:", score)
     return score
 
 
