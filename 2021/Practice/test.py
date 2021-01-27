@@ -52,19 +52,17 @@ if __name__ == "__main__":
     # test_opt()
 
     # Test file writing
-    solved_values = [
-        [2, 1, 4],
-        [3, 0, 2, 3]
-    ]
+    solved_values = [[2, 1, 4], [3, 0, 2, 3]]
     write_file("test.txt", solved_values)
-
 
     # Test file reading
     import os
+
     here = os.path.dirname(os.path.realpath(__file__))
     file_loc = os.path.join(here, "input_files", "a_example.in")
     inp = read_file(file_loc)
     from pprint import pprint
+
     pprint(inp)
 
     print("Score is {}".format(scorer(solved_values, inp)))

@@ -67,7 +67,7 @@ def read_file(input_location):
         # T4 number of 4 person teams
 
         # Ingredients is a list of size M with each item being
-        # an integer I - the number of ingredients, 
+        # an integer I - the number of ingredients,
         # followed by the ingredients as strings
         info = M, T2, T3, T4, pizzas
 
@@ -91,7 +91,7 @@ def write_file(output_location, solution):
 
     """
     with open(output_location, "w") as f:
-        # Each entry solution has 
+        # Each entry solution has
         # L (number of people) P1 P2 ... PL (the list of pizzas they get)
 
         # First line contains a number D - number of pizza deliveries
