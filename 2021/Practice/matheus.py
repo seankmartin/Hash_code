@@ -58,7 +58,7 @@ def matheus_solution(info, **kwargs):
             curr_idx += val
 
         score = scorer(solution, info)
-        
+
         return solution, score
 
     # Try different draw orders for a best score

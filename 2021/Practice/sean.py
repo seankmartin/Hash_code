@@ -1,5 +1,7 @@
 import os
 import time
+import itertools
+import math
 
 import numpy as np
 
@@ -10,6 +12,7 @@ except:
     pass
 
 from utils import save_object
+from common import scorer
 
 # TODO Put classes here that may be useful to store info in
 
@@ -101,3 +104,63 @@ def sean_solution(info, **kwargs):
 
     result = objective(args)
     return result["solution"], result["score"]
+
+
+def assign_pizzas(sorted_pizzas, draw_arr, info):
+    solution = []
+    curr_idx = 0
+    for val in draw_arr:
+        end_idx = curr_idx + val
+        if end_idx <= len(sorted_pizzas):
+            choices = [n for n in sorted_pizzas[curr_idx:end_idx]]
+            team_size = val
+            new_entry = [team_size,] + choices
+            solution.append(new_entry)
+        curr_idx += val
+
+    score = scorer(solution, info)
+
+    return solution, score
+
+
+def make_draw_arr(total_pizzas, order, size_dict):
+    total_used = 0
+    draw_arr = []
+    for val in order:
+        team_size = size_dict[val]
+        for i in range(team_size):
+            if total_used + val <= total_pizzas:
+                draw_arr.append(val)
+                total_used += val
+            else:
+                break
+    return draw_arr
+
+
+def brute_force(info, **kwargs):
+    """Brute force best solution - should only be used on the first."""
+    M, T2, T3, T4, pizzas = info
+
+    pizza_idxs = [i for i in range(len(pizzas))]
+
+    # Can order as T2 > T3 > T4 and permutes
+    teams = [2, 3, 4]
+    team_dict = {2: T2, 3: T3, 4: T4}
+
+    total_possible = 0
+    best_score = 0
+
+    # team_permutations = 6
+    # pizza_permutations = math.factorial(M)
+    for team_perm in itertools.permutations(teams):
+        draw_arr = make_draw_arr(M, team_perm, team_dict)
+        for i, pizza_perm in enumerate(itertools.permutations(pizza_idxs)):
+            solution, score = assign_pizzas(pizza_perm, draw_arr, info)
+            if score > best_score:
+                best_solution = solution
+                best_score = score
+            total_possible += 1
+
+    print("Tested a total of {} solutions".format(total_possible))
+    print("The best solution was {}".format(best_solution))
+    return best_solution, best_score
