@@ -26,9 +26,6 @@ def matheus_solution(info, **kwargs):
     # TODO write your solution here!
     M, T2, T3, T4, pizzas = info
 
-    # TODO decide number of choices and do without replacement
-    # pizza_idxs = np.array([i for i in range(len(pizzas))])
-
     # Count all ingredients to use as score
     ing = count_ingredients(pizzas)
 
@@ -39,7 +36,6 @@ def matheus_solution(info, **kwargs):
     sorted_new_pizzas = sorted(
         new_pizzas, key=operator.attrgetter("score"), reverse=True
     )
-    # np.random.shuffle(pizza_idxs)
 
     draw_arr = []
     for i in range(T4):
@@ -49,21 +45,25 @@ def matheus_solution(info, **kwargs):
     for i in range(T2):
         draw_arr.append(2)
 
-    solution = []
+    def assign_pizzas():
+        solution = []
+        curr_idx = 0
+        for val in draw_arr:
+            end_idx = curr_idx + val
+            if end_idx <= len(sorted_new_pizzas):
+                choices = [n.idx for n in sorted_new_pizzas[curr_idx:end_idx]]
+                team_size = val
+                new_entry = [team_size,] + choices
+                solution.append(new_entry)
+            curr_idx += val
 
-    curr_idx = 0
-    for val in draw_arr:
-        end_idx = curr_idx + val
-        if end_idx <= len(sorted_new_pizzas):
-            choices = [n.idx for n in sorted_new_pizzas[curr_idx:end_idx]]
-            team_size = val
-            new_entry = [team_size,] + choices
-            solution.append(new_entry)
-        curr_idx += val
+        score = scorer(solution, info)
+        
+        return solution, score
 
-    # TODO Parse any parameters you need
-    val1 = kwargs.get("name", None)
+    # Try different draw orders for a best score
+    best_score = 0
+    num_iters = kwargs.get("num_iters", 1)
+    final_solution, best_score = assign_pizzas()
 
-    score = scorer(solution, info)
-
-    return solution, score
+    return final_solution, best_score
